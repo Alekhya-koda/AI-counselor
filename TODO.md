@@ -1,32 +1,47 @@
-# TODO
+# TODO (Codex Vibe Coding MVP Demo)
 
-## Product & UX
-- Map end-to-end experience for individual chats, screening cadence, shared summaries, and escalation.
-- Define information architecture for partner linking, private reflection, shared understanding, and group chat.
-- Draft privacy/consent flows with clear non-clinical disclaimers.
-- Create low-fidelity wireframes for chat, screening, summary, and escalation entry points.
+## Stack
+- Vite + React + Tailwind
+- Local mock data only (no backend)
+- Demo-grade auth + partner linking (front-end only)
 
-## Content & Behavioral Design
-- Write non-judgmental prompt library for individual reflection during pregnancy/postpartum.
-- Define shared emotional framework terminology and glossary for summaries.
-- Establish language guidelines to avoid diagnosis or prescriptive advice.
-- Draft AI counselor facilitation scripts for group chat alignment.
+## Core Flow + UX
+- Lock demo flow: Partner A reflection -> EPDS -> escalation -> group chat -> close
+- Define minimal UI screens: private chat, EPDS survey, risk result, consent modal, group chat
+- Draft key AI prompts: reflection, EPDS interpretation, escalation invite, group chat opener/closer
 
-## Data, Safety, and Risk
-- Select screening instrument(s) and cadence; document non-diagnostic interpretation rules.
-- Define longitudinal risk thresholds and escalation triggers.
-- Specify privacy, consent, and access control requirements.
-- Create safety review checklist and red-team scenarios for language risks.
+## App Scaffold + Core Flows (Frontend Only)
+- Scaffold app with Vite + React + Tailwind
+- Build screen shell + routing/state machine for demo flow
+- Implement demo auth + partner linking (single screen + in-memory state)
+- Implement private chat (Partner A/B) with role separation
+- Implement EPDS survey (10 items, 0–3) and scoring
+- Implement risk signal logic:
+  - EPDS >=13, or EPDS >=10 twice, or sustained irritability + loss of interest
+- Store results in local state with privacy separation (private vs shared)
 
-## Engineering (MVP)
-- Implement auth and partner linking.
-- Build private chat flows for each partner with secure storage.
-- Add screening scheduler, delivery, and longitudinal tracking.
-- Generate shared interpretive summaries (understanding, not advice).
-- Implement risk detection and escalation to AI counselor group chat.
-- Create therapist access pathway for triggered sessions.
+## Escalation + Group Chat
+- Build consent gate for group chat; share neutral summaries only
+- Implement AI counselor escalation trigger + invite
+- Implement group chat UI and AI mediation responses
+- Add present-moment alignment script (safety -> shared mapping -> needs -> close)
 
-## Pilot & Validation
-- Recruit 5–10 couples and 1–2 therapists for a 4–6 week pilot.
-- Define pilot metrics: screening adherence, clarity/misalignment scores, escalation latency.
-- Run pilot, collect feedback, and iterate on safety, content, and UX.
+## Voice + Polish
+- Stub TTS (button + placeholder audio; integrate ElevenLabs only if keys available)
+- Add language safeguards (non-clinical, non-prescriptive)
+- Run full end-to-end demo; fix UX gaps
+- Prepare demo script + rehearsal checklist
+
+## Implementation Notes (Codex)
+- Keep all flows client-side; no network calls required
+- Use mock AI responses (hardcoded scripts) aligned to the demo scenario
+- Ensure the demo can be driven start-to-finish in under 5 minutes
+
+## Demo Readiness Checklist
+- Partner A reflection works and shows empathetic mirroring
+- Partner B reflection reframes misinterpretation without blame
+- EPDS completes, scores, and triggers risk signal
+- Consent is explicit; private data stays private
+- Group chat runs and ends with shared understanding summary
+- Optional TTS plays for closing summary
+
