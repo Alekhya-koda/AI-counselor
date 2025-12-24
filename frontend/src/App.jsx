@@ -1,35 +1,87 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import AuthScreen from './components/AuthScreen';
+import PrivateChat from './components/PrivateChat';
+import EPDSScreen from './components/EPDSScreen';
+import ConsentModal from './components/ConsentModal';
+import GroupChat from './components/GroupChat';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [currentScreen, setCurrentScreen] = useState('auth');
+  const [user, setUser] = useState(null);
+  const [epdsScore, setEpdsScore] = useState(null);
+  const [hasRisk, setHasRisk] = useState(false);
+  const [showConsent, setShowConsent] = useState(false);
+
+  const handleAuth = (userData) => {
+    setUser(userData);
+    setCurrentScreen('privateChat');
+  };
+
+  const handlePrivateChatComplete = () => {
+    setCurrentScreen('epds');
+  };
+
+  const handleEPDSComplete = (score, risk) => {
+    setEpdsScore(score);
+    setHasRisk(risk.hasRisk);
+
+    if (risk.hasRisk) {
+      setShowConsent(true);
+    } else {
+      setCurrentScreen('complete');
+    }
+  };
+
+  const handleConsentAccept = () => {
+    setShowConsent(false);
+    setCurrentScreen('groupChat');
+  };
+
+  const handleConsentDecline = () => {
+    setShowConsent(false);
+    setCurrentScreen('complete');
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="app">
+      {currentScreen === 'auth' && (
+        <AuthScreen onAuth={handleAuth} />
+      )}
+
+      {currentScreen === 'privateChat' && (
+        <PrivateChat user={user} onComplete={handlePrivateChatComplete} />
+      )}
+
+      {currentScreen === 'epds' && (
+        <EPDSScreen user={user} onComplete={handleEPDSComplete} />
+      )}
+
+      {currentScreen === 'groupChat' && (
+        <GroupChat user={user} />
+      )}
+
+      {currentScreen === 'complete' && (
+        <div className="complete-screen fade-in">
+          <div className="complete-container">
+            <h1>Thank You</h1>
+            <p>You've completed your reflection and screening for today.</p>
+            <p className="complete-message">
+              Remember: emotional changes during pregnancy and postpartum are normal.
+              You're not alone in this journey.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {showConsent && (
+        <ConsentModal
+          onAccept={handleConsentAccept}
+          onDecline={handleConsentDecline}
+        />
+      )}
+    </div>
+  );
 }
 
-export default App
+export default App;
